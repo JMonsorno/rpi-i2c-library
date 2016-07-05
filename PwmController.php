@@ -89,13 +89,13 @@ abstract class PwmController extends I2C {
   }
 
   protected function setPwmOn($channel, $on) {
-    $this->write8(self::ALL_LED_ON_L+4*$channel, $on & 0xFF);
-    $this->write8(self::ALL_LED_ON_H+4*$channel, $on >> 8);
+    $this->write8(self::LED0_ON_L+4*$channel, $on & 0xFF);
+    $this->write8(self::LED0_ON_H+4*$channel, $on >> 8);
   }
 
   protected function setPwmOff($channel, $off) {
-    $this->write8(self::ALL_LED_OFF_L+4*$channel, $off & 0xFF);
-    $this->write8(self::ALL_LED_OFF_H+4*$channel, $off >> 8);
+    $this->write8(self::LED0_OFF_L+(4*$channel), $off & 0xFF);
+    $this->write8(self::LED0_OFF_H+(4*$channel), $off >> 8);
   }
 
   protected function setAllPwm($on, $off) {
