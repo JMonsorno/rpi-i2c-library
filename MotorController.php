@@ -34,7 +34,7 @@ class MotorController extends PwmController {
     return $motor;
   }
 
-  public function setMotorSpeed($motorNum, $speed) {
+  public function setSpeed($motorNum, $speed) {
     if ($speed < 0) {
       $speed = 0;
     } elseif ($speed > 255) {

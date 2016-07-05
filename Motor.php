@@ -17,7 +17,7 @@ class Motor {
   }
 
   public function setSpeed($speed) {
-    $this->motorController->setMotorSpeed($this->motorNumber, $speed);
+    $this->motorController->setSpeed($this->motorNumber, $speed);
   }
 
   public function run($command) {
