@@ -1,7 +1,8 @@
 <?php
 require_once("I2C.php");
+require_once("iShutdown.php");
 
-abstract class PwmController extends I2C {
+abstract class PwmController extends I2C implements iShutdown{
   // Registers/etc.
   const MODE1              = 0x00;
   const MODE2              = 0x01;
@@ -103,6 +104,13 @@ abstract class PwmController extends I2C {
     $this->write8(self::ALL_LED_ON_H, $on >> 8);
     $this->write8(self::ALL_LED_OFF_L, $off & 0xFF);
     $this->write8(self::ALL_LED_OFF_H, $off >> 8);
+  }
+
+  public function shutdown() {
+    if ($this->debug) {
+      echo "Shutting down pwmController" . PHP_EOL;
+    }
+    $this->setAllPwm(0, 0);
   }
 }
 ?>
