@@ -37,7 +37,13 @@ class ServoController extends I2C {
     if ($this->debug) {
       echo "--Begin Initialize" . PHP_EOL;
     }
+
     $this->turnOffServos();
+
+    if ($this->debug) {
+      echo "--Reseting PCA9685 MODE1 (without SLEEP) and MODE2" . PHP_EOL;
+    }
+
     $this->write8(self::MODE2, self::OUTDRV);
     $this->write8(self::MODE1, self::ALLCALL);
     usleep(5000);
@@ -70,6 +76,9 @@ class ServoController extends I2C {
   }
 
   public function turnOffServos() {
+    if ($this->debug) {
+      echo "--Turning off all servos" . PHP_EOL;
+    }
     $this->write8(self::ALL_LED_ON_L, 0x00);
     $this->write8(self::ALL_LED_ON_H, 0x00);
     $this->write8(self::ALL_LED_OFF_L, 0x00);
@@ -80,16 +89,28 @@ class ServoController extends I2C {
    * $index    0-15
    * $position 0-450
    */
-  public function setServoPosition($index, $position) {
+  public function setServoPositionAbs($index, $position) {
+    if ($this->debug) {
+      echo "--Setting servo $index to $position" . PHP_EOL;
+    }
     $loRegister = self::LED0_OFF_L + 4 * $index;
     $hiRegister = self::LED0_OFF_H + 4 * $index;
-    $position += 150;
     $this->write8($loRegister, $position & 0xFF);
     $this->write8($hiRegister, $position >> 8);
   }
 
+  public function setServoPosition($index, $position) {
+    $this->setServoPositionAbs($index, $position+150);
+  }
+
   public function setServoPositionDegree($index, $position) {
     $this->setServoPosition($index, $position * 2.5);
+  }
+
+  public function getServoPosition($index) {
+    $loRegister = self::LED0_OFF_L + 4 * $index;
+    $hiRegister = self::LED0_OFF_H + 4 * $index;
+    return ($this->readU8($loRegister) + ($this->readU8($hiRegister) << 8)) - 150;
   }
 }
 ?>
