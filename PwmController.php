@@ -108,7 +108,7 @@ abstract class PwmController extends I2C implements iShutdown{
 
   public function shutdown() {
     if ($this->debug) {
-      echo "Shutting down pwmController" . PHP_EOL;
+      echo "Shutting down PwmController" . PHP_EOL;
     }
     $this->setAllPwm(0, 0);
   }

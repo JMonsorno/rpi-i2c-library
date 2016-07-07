@@ -16,6 +16,13 @@ class MotorController extends PwmController {
     $this->initMotors();
   }
 
+  public function shutdown() {
+    if ($this->debug) {
+      echo "Shutting down MotorController" . PHP_EOL;
+    }
+    $this->setAllPwm(0, 0);
+  }
+
   private function initMotors() {
    $this->motors = [];
    $this->motors[] = new Motor($this, 1, 8, 10, 9);
@@ -45,8 +52,11 @@ class MotorController extends PwmController {
   }
 
   public function run($motorNum, $command) {
-    $in1 = $this->motors[$motorNum-1]->in1;
-    $in2 = $this->motors[$motorNum-1]->in2;
+    $motor = $this->motors[$motorNum-1];
+    if ($motor->command == $command)
+      return;
+    $in1 = $motor->in1;
+    $in2 = $motor->in2;
     switch ($command) {
       case self::FORWARD:
         $this->setPin($in1, 1);

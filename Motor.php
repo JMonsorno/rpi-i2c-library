@@ -7,6 +7,7 @@ class Motor {
   public $pwm;
   public $in1;
   public $in2;
+  public $command = 0;
 
   function __construct($motorController, $motorNumber, $pwm, $in1, $in2){
     $this->motorController = $motorController;
